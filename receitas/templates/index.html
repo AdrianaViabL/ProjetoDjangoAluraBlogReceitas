@@ -21,7 +21,13 @@
                     {% for receita in receitas %}
                     <div class="col-12 col-sm-6 col-lg-4">
                         <div class="single-best-receipe-area mb-30">
-                            <img src="{% static 'img/bg-img/foto_receita.png' %}" alt="">
+                            {% if receita.foto_receita %}
+                                <div style="min-height:355px; text-align:center;">
+                                    <img src="{{ receita.foto_receita.url }}" alt="" class="formata-imagem">
+                                </div>
+                            {% else %}
+                                <img src="{% static 'img/bg-img/foto_receita.png' %}" alt="">
+                            {% endif %}
                             <div class="receipe-content">
                                 <a href="{% url 'receita' receita.id %}">
                                     <h5>{{ receita.nome_receita }}</h5>
