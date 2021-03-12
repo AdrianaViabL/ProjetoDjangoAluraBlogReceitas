@@ -15,3 +15,5 @@ class Receita(models.Model):
     publicado = models.BooleanField(default=False)
     foto_receita = models.ImageField(upload_to='fotos/%m/%Y/', blank=True)
 
+    def __str__(self):
+        return self.nome_receita
