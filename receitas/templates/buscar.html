@@ -1,13 +1,8 @@
 {% extends 'body.html' %}
 {% load static %}
-    {% block preloader %}
-        <!-- Preloader -->
-        <div id="preloader">
-            <i class="circle-preloader"></i>
-            <img src="{% static 'img/core-img/pizza.png' %}" alt="">
-        </div>
-    {% endblock %}
-    {% block conteudo %}
+
+{% block conteudo %}
+    {% include 'parcials/_preloadpizza.html' %}
 
     <!-- ##### Best Receipe Area Start ##### -->
     <section class="best-receipe-area">
