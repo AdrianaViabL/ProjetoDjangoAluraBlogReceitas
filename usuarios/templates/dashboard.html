@@ -1,39 +1,40 @@
 {% extends 'body.html' %}
 {% load static %}
 {% block conteudo %}
-   <div class="contact-area section-padding-0-80">
+   <div class="contact-area section-padding-0">
        <div class="container">
            <div class="row">
                <div class="col-12">
                    <div class="section-heading">
                        <h3>Olá {{ user.username }}</h3>
-<section class="best-receipe-area">
-        <div class="container">
-            <div class="row">
-                <!-- Single Best Receipe Area -->
-                {% if receitas %}
-                    {% for receita in receitas %}
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <div class="single-best-receipe-area mb-30">
-                            {% if receita.foto_receita %}
-                                <div style="min-height:355px; text-align:center;">
-                                    <img src="{{ receita.foto_receita.url }}" alt="" class="formata-imagem">
+                        <section class="best-receipe-area">
+                            <div class="container">
+                                <div class="row">
+                                    <!-- Single Best Receipe Area -->
+                                    {% if receitas %}
+                                        {% for receita in receitas %}
+                                        <div class="col-12 col-sm-6 col-lg-4">
+                                            <div class="single-best-receipe-area mb-30">
+                                                {% if receita.foto_receita %}
+                                                    <div style="min-height:355px; text-align:center;">
+                                                        <img src="{{ receita.foto_receita.url }}" alt="" class="formata-imagem">
+                                                    </div>
+                                                {% else %}
+                                                    <img src="{% static 'img/bg-img/foto_receita.png' %}" alt="">
+                                                {% endif %}
+                                                <div class="receipe-content">
+                                                    <a href="{% url 'receita' receita.id %}">
+                                                        <h5>{{ receita.nome_receita }}</h5>
+                                                    </a>
+                                                </div>
+                                                <a href="{% url 'deleta_receita' receita.id %}" type="button" class="btn btn-danger">Deletar</a>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
-                            {% else %}
-                                <img src="{% static 'img/bg-img/foto_receita.png' %}" alt="">
-                            {% endif %}
-                            <div class="receipe-content">
-                                <a href="{% url 'receita' receita.id %}">
-                                    <h5>{{ receita.nome_receita }}</h5>
-                                </a>
                             </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-    </section>
+                        </section>
                    </div>
                </div>
            </div>

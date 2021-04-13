@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib import auth
+from django.contrib import auth, messages
 from receitas.models import Receita
 
 
@@ -11,19 +11,25 @@ def cadastro(request):
         senha = request.POST['password']
         senha2 = request.POST['password2']
 
-        if not nome.strip() or not email.strip:
-            print('digite um valor válido')
+        if campo_vazio(nome) or campo_vazio(email):
+            messages.error(request, 'digite um valor válido!')
             return redirect('cadastro')
 
         if senha != senha2:
-            print('As senha não batem!')
+            messages.error(request, 'As senhas não batem!')
+            return redirect('cadastro')
+
+        if User.objects.filter(username=nome).exists():
+            messages.error(request, 'Nome de usuário já cadastrado!')
             return redirect('cadastro')
 
         if User.objects.filter(email=email).exists():
-            print('usuário já cadastrado!')
+            messages.error(request, 'email de usuário já cadastrado!')
             return redirect('cadastro')
+
         user = User.objects.create_user(username=nome, email=email, password=senha)
         user.save()
+        messages.success(request, 'Cadastro realizado com sucesso!')
         return redirect('login')
     else:
         return render(request, 'cadastro.html')
@@ -33,17 +39,20 @@ def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         senha = request.POST['password']
-        if email.strip() == '' or senha.strip() == '':
-            print('dados inválidos')
+        if campo_vazio(email) or campo_vazio(senha):
+            messages.error(request, 'Os campos email e senha não podem estar vazios')
             return redirect('login')
+
         if User.objects.filter(email=email).exists():
             nome = User.objects.filter(email=email).values_list('username', flat=True).get()
             user = auth.authenticate(request, username=nome, password=senha)
             if user is not None:
                 auth.login(request, user)
-                print('Login realizado com sucesso!')
+                messages.success(request, 'Login realizado com sucesso!')
                 return redirect('dashboard')
-
+        else:
+            messages.error(request, 'usuário não cadastrado')
+            return redirect('login')
     return render(request, 'login.html')
 
 
@@ -76,7 +85,31 @@ def cria_receita(request):
             categoria = request.POST['categoria']
             foto_receita = request.FILES['foto_receita']#por se tratar de um dado do tipo file
             user = get_object_or_404(User, pk=request.user.id)
-            print('passei aqui????')
+
+            if campo_vazio(nome_receita):
+                messages.error(request, 'Nome da receita é obrigatório')
+                return redirect('cria_receita')
+
+            if campo_vazio(ingredientes):
+                messages.error(request, 'ingredientes são obrigatórios')
+                return redirect('cria_receita')
+
+            if campo_vazio(modo_preparo):
+                messages.error(request, 'Modo de preparo é obrigatório')
+                return redirect('cria_receita')
+
+            if campo_vazio(tempo_preparo):
+                messages.error(request, 'tempo de preparo é obrigatório')
+                return redirect('cria_receita')
+
+            if campo_vazio(rendimento):
+                messages.error(request, 'rendimento é obrigatórios')
+                return redirect('cria_receita')
+
+            if campo_vazio(categoria):
+                messages.error(request, 'categoria é obrigatório')
+                return redirect('cria_receita')
+
             receita = Receita.objects.create(
                 pessoa=user,
                 nome_receita=nome_receita,
@@ -94,3 +127,13 @@ def cria_receita(request):
             return render(request, 'cria_receita.html')
     else:
         return redirect('index')
+
+
+def campo_vazio(campo):
+    return not campo.strip()
+
+
+def deleta_receita(request, receita_id):
+    receita = get_object_or_404(Receita, pk=receita_id)
+    receita.delete()
+    return redirect('dashboard')
