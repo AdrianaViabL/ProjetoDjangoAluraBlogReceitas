@@ -1,6 +1,7 @@
 {% extends 'body.html' %}
 {% load static %}
 {% block conteudo %}
+    {% include 'parcials/_preloadpizza.html' %}
    <div class="contact-area section-padding-0">
        <div class="container">
            <div class="row">
@@ -27,6 +28,7 @@
                                                         <h5>{{ receita.nome_receita }}</h5>
                                                     </a>
                                                 </div>
+                                                <a href="{% url 'editar_receita' receita.id %}" type="button" class="btn btn-info">Editar</a>
                                                 <a href="{% url 'deleta_receita' receita.id %}" type="button" class="btn btn-danger">Deletar</a>
                                             </div>
                                         </div>

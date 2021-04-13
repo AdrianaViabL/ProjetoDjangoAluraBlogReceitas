@@ -1,3 +1,4 @@
+# app retirado de uso na parte 4 do curso da Alura
 from django.db import models
 
 class Pessoas(models.Model):
