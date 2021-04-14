@@ -59,6 +59,9 @@
                                     {% if user.is_authenticated %}
                                         <li><a href="{% url 'index' %}">Home</a></li>
                                         <li><a href="{% url 'dashboard' %}">Minhas receitas</a></li>
+                                        {% if user.is_superuser %}
+                                              <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                                          {% endif %}
                                         <li><a href="{% url 'cria_receita' %}">Criar receita</a></li>
                                         <li><a href="{% url 'logout' %}">Logout</a></li>
                                     {% else %}
